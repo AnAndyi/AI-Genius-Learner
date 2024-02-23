@@ -1,0 +1,74 @@
+from flask import Flask, render_template, request
+from flask_restful import Api, Resource
+from flask_caching import Cache
+from flask_login import LoginManager, login_required
+import os
+import openai
+
+# Create a Flask app
+app = Flask(__name__)
+
+# Configure the cache
+cache = Cache(app, config={"CACHE_TYPE": "simple"})
+
+# Configure the login manager
+login_manager = LoginManager(app)
+
+# Create a Flask-RESTful API
+api = Api(app)
+
+# Get the API key from the environment variable
+openai.api_key = os.environ.get("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")
+
+# Get the user input
+client = openai.OpenAI(api_key="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")
+
+# Define a resource for generating questions
+class QuestionGenerator(Resource):
+    # Use the login_required decorator to protect the route
+    @login_required
+    def post(self):
+        # Get the values from the input fields
+        course = request.form.get("course")
+        chapter = request.form.get("chapter")
+        difficulty = request.form.get("difficulty")
+        num_questions = request.form.get("num_questions")
+
+        prompt = f"Can you give me {num_questions} practice questions of {course}, {chapter} with difficulty scale {difficulty}/100? Please just list the questions without saying anything else such as the sentace before \n\n1."
+
+        # Validate the input values
+        if not course or not chapter or not difficulty or not num_questions:
+            return {"message": "Please fill in all the fields."}, 400
+        try:
+            num_questions = int(num_questions)
+        except ValueError:
+            return {"message": "Please enter a valid number of questions."}, 400
+
+        # Call the chat_gpt function to generate a question
+        question = self.chat_gpt(prompt)
+
+        # Return the question as a JSON response
+        return {"question": question}, 200
+
+    # Use the cache.memoize decorator to cache the function output
+    @cache.memoize(timeout=60)
+    def chat_gpt(self, prompt):
+        # Make a request to the OpenAI API using the Completion endpoint
+        completion = client.chat.completions.create(
+            model='gpt-3.5-turbo',
+            messages=[{'role': 'user', 'content': prompt}]
+        )
+        return completion.choices[0].message
+
+# Add the resource to the API
+api.add_resource(QuestionGenerator, "/generate")
+
+# Define a route for the homepage
+@app.route("/")
+def index():
+    # Render a template that contains the input fields and the button
+    return render_template("index.html")
+
+# Run the app
+if __name__ == "__main__":
+    app.run(debug=True)
