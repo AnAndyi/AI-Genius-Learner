@@ -32,6 +32,8 @@ Enter the course name: Biology
 
 Enter the chapter: 5
 
+Enter the difficulty: hard
+
 How many questions would you like? 5
 
 Contact
