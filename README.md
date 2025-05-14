@@ -17,7 +17,7 @@ Course Name: The subject or course you want to study (e.g., "Mathematics").
 
 Chapter: Which chapter (e.g., 6).
 
-Difficulty: How difficult (e.g., "hard")
+Difficulty: How difficult (difficulty scale {difficulty}/100?)
 
 Number of Questions: How many practice questions you want to generate.
 
@@ -32,7 +32,7 @@ Enter the course name: Biology
 
 Enter the chapter: 5
 
-Enter the difficulty: hard
+Enter the difficulty: 50
 
 How many questions would you like? 5
 
