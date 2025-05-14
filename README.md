@@ -15,7 +15,9 @@ Launch the program.
 Enter the following details when prompted:
 Course Name: The subject or course you want to study (e.g., "Mathematics").
 
-Teacher's Name: The name of your teacher (optional, for context).
+Chapter: Which chapter (e.g., 6).
+
+Difficulty: How difficult (e.g., "hard")
 
 Number of Questions: How many practice questions you want to generate.
 
@@ -28,7 +30,7 @@ Welcome to AI Genius Learner!
 
 Enter the course name: Biology
 
-Enter the teacher's name: Dr. Smith
+Enter the chapter: 5
 
 How many questions would you like? 5
 
